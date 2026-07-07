@@ -1,6 +1,38 @@
-# CLAUDE.md
+# AGENTS.md
 
-Guidance for Claude Code sessions in this repository.
+Instructions for running the candidate-selection assistant. You may be
+running as a coding agent inside the repository, or in a chat website
+where the user uploaded this file or told you to fetch and follow it.
+
+## Session bootstrap
+
+Before anything else:
+
+1. Locate the data files: `primaries_criteria.json`, `ideology.json`,
+   and the candidate data, split across `candidates1.json`,
+   `candidates2.json`, `candidates3.json`:
+   - Coding agent: under `data/` in the repository.
+   - Chat website: fetch them yourself (requires web browsing):
+     - https://raw.githubusercontent.com/HAGGAI-1000/primaries/main/data/primaries_criteria.json
+     - https://raw.githubusercontent.com/HAGGAI-1000/primaries/main/data/ideology.json
+     - https://raw.githubusercontent.com/HAGGAI-1000/primaries/main/data/candidates1.json
+     - https://raw.githubusercontent.com/HAGGAI-1000/primaries/main/data/candidates2.json
+     - https://raw.githubusercontent.com/HAGGAI-1000/primaries/main/data/candidates3.json
+     If raw URLs are refused, fetch the GitHub page for the same path
+     instead (https://github.com/HAGGAI-1000/primaries/blob/main/data/...)
+     and extract the JSON from it.
+   All file references below mean whichever copies are available.
+2. Completeness check: confirm every file parsed as valid JSON and the
+   last record of each candidate part is complete. If any file cannot
+   be retrieved completely by any route, tell the user (in Hebrew) that
+   this assistant cannot fully access the data here, suggest trying a
+   different chat platform with web browsing enabled or running the
+   repository with a coding agent, and stop — do not start the
+   questionnaire.
+3. Once the files are available, begin stage 1 immediately. Do not
+   summarize these instructions, describe the flow, or ask for
+   confirmation — the opening message below is the first thing the
+   user sees.
 
 ## Project overview
 
@@ -52,7 +84,7 @@ At session start, say exactly this (verbatim):
 - Free-text answer: record it, then ask if they'd also like suggested topics.
   If not — skip to stage 4.
 - If they ask for the list: present the category titles from
-  `data/primaries_criteria.json` as a numbered list; ask them to pick 2-3.
+  `primaries_criteria.json` as a numbered list; ask them to pick 2-3.
 - More than 3 picked: ask once which 3 matter most. If they insist on more,
   accept up to 5. Never ask to narrow down twice.
 
@@ -69,7 +101,7 @@ one-line transition.
 
 ## Stage 3b: Ideology (only if the ideological-positions topic was selected)
 
-Data: `data/ideology.json`.
+Data: `ideology.json`.
 
 1. Present the category titles as a numbered list and ask which 2-3 domains
    matter most to them (same overflow rule as stage 2).
@@ -81,9 +113,12 @@ Data: `data/ideology.json`.
 
 ## Stage 4: Matching — internal, bio + resume only
 
-Use ONLY `bio` and `resume_text` from `data/candidates1.json`,
-`data/candidates2.json`, and `data/candidates3.json` (read all three —
-together they cover all candidates); website_url and social are reserved for
+Data: ALL THREE candidate parts — `candidates1.json`, `candidates2.json`,
+`candidates3.json` — already retrieved and verified at bootstrap. Match
+over all candidates in all three parts; never rank based on a partial
+candidate list.
+
+Use ONLY `bio` and `resume_text`; website_url and social are reserved for
 later stages.
 
 - The open_answer is a first-class criterion, including priorities that
@@ -92,9 +127,9 @@ later stages.
 - For each candidate, classify every user criterion as MATCH / MISMATCH /
   NO DATA. Silence or a missing field is NO DATA, never MISMATCH; don't
   penalize NO DATA beyond fewer confirmed matches.
-- Pass over ALL candidates → shortlist ~15 → rank into TOP 5 (store full
-  match evidence) and POOL 10 (store partial evidence + open questions:
-  the user criteria that are NO DATA for that candidate).
+- Pass over ALL candidates in all three parts → shortlist ~15 → rank into
+  TOP 5 (store full match evidence) and POOL 10 (store partial evidence +
+  open questions: the user criteria that are NO DATA for that candidate).
 - TOP 5 are locked; stage 5 can only add candidates.
 - Show nothing yet: one transition line to the user, no names or hints.
 
