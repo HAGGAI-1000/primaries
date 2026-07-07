@@ -1,0 +1,233 @@
+{
+  "categories": [
+    {
+      "id": 1,
+      "title": "עמדות אידיאולוגיות",
+      "items": []
+    },
+    {
+      "id": 2,
+      "title": "ניסיון ביצועי מוכח",
+      "items": [
+        {
+          "id": "budget_management",
+          "text": "ניהול תקציב / ארגון / צוות"
+        },
+        {
+          "id": "measurable_achievements",
+          "text": "הישגים מדידים בתפקידים קודמים"
+        },
+        {
+          "id": "passed_legislation",
+          "text": "חקיקה שעברה (לח\"כים לשעבר)"
+        },
+        {
+          "id": "field_success",
+          "text": "הצלחות בשטח (לא רק השתתפות בפאנלים)"
+        },
+        {
+          "id": "fundraising_coalition",
+          "text": "יכולת גיוס משאבים ובניית קואליציות"
+        }
+      ]
+    },
+    {
+      "id": 3,
+      "title": "אמינות ויושרה",
+      "items": [
+        {
+          "id": "consistency_over_time",
+          "text": "עקביות לאורך זמן (לא התהפכויות)"
+        },
+        {
+          "id": "words_actions_consistency",
+          "text": "עקביות בין דברים למעשים"
+        },
+        {
+          "id": "campaign_funding_transparency",
+          "text": "שקיפות בנושא מימון הקמפיין"
+        },
+        {
+          "id": "no_corruption_history",
+          "text": "היסטוריה ללא פרשיות שחיתות"
+        },
+        {
+          "id": "admits_mistakes",
+          "text": "נכונות להודות בטעויות"
+        },
+        {
+          "id": "speaks_clearly_on_controversy",
+          "text": "נכונות לדבר בבהירות גם על נושאים שנויים במחלוקת"
+        },
+        {
+          "id": "detailed_positions",
+          "text": "עמדה מפורטת (לא רק סיסמאות)"
+        }
+      ]
+    },
+    {
+      "id": 4,
+      "title": "יכולת פרלמנטרית",
+      "items": [
+        {
+          "id": "knesset_experience",
+          "text": "היכרות עם עבודת הכנסת / ועדות"
+        },
+        {
+          "id": "legislative_drafting",
+          "text": "יכולת ניסוח חקיקה"
+        },
+        {
+          "id": "cross_party_cooperation",
+          "text": "יכולת לעבוד עם מפלגות אחרות"
+        },
+        {
+          "id": "debate_persuasion",
+          "text": "כישורי דיון ושכנוע"
+        }
+      ]
+    },
+    {
+      "id": 5,
+      "title": "כישורי מנהיגות ותקשורת",
+      "items": [
+        {
+          "id": "clear_public_presentation",
+          "text": "יכולת הצגת עמדות בבהירות בפני קהלים שונים"
+        },
+        {
+          "id": "media_presence",
+          "text": "נוכחות תקשורתית"
+        },
+        {
+          "id": "handles_pressure",
+          "text": "יכולת לעמוד תחת לחץ"
+        },
+        {
+          "id": "charisma",
+          "text": "כריזמה"
+        },
+        {
+          "id": "social_media_presence",
+          "text": "נוכחות במדיה החברתית"
+        },
+        {
+          "id": "cross_party_appeal",
+          "text": "יכולת למשוך קולות ממפלגות אחרות"
+        },
+        {
+          "id": "public_image",
+          "text": "תדמית ציבורית"
+        }
+      ]
+    },
+    {
+      "id": 6,
+      "title": "מאפיינים דמוגרפים",
+      "items": [
+        {
+          "id": "periphery_resident",
+          "text": "תושב הפריפריה"
+        },
+        {
+          "id": "woman",
+          "text": "אשה"
+        },
+        {
+          "id": "lgbtq",
+          "text": "להט\"ב"
+        },
+        {
+          "id": "elderly",
+          "text": "מבוגר"
+        },
+        {
+          "id": "young",
+          "text": "צעיר"
+        },
+        {
+          "id": "arab",
+          "text": "ערבי"
+        },
+        {
+          "id": "druze",
+          "text": "דרוזי"
+        },
+        {
+          "id": "ethiopian",
+          "text": "אתיופי"
+        },
+        {
+          "id": "former_soviet_union",
+          "text": "ברית המועצות"
+        },
+        {
+          "id": "haredi",
+          "text": "חרדי"
+        },
+        {
+          "id": "religious_zionist",
+          "text": "דתי לאומי"
+        }
+      ]
+    },
+    {
+      "id": 7,
+      "title": "מומחיות בנושא ספציפי (בטחון, כלכלה, חינוך, וכו')",
+      "items": [
+        {
+          "id": "security",
+          "text": "בטחון"
+        },
+        {
+          "id": "economy",
+          "text": "כלכלה"
+        },
+        {
+          "id": "health",
+          "text": "בריאות"
+        },
+        {
+          "id": "education",
+          "text": "חינוך"
+        },
+        {
+          "id": "environment",
+          "text": "סביבה"
+        },
+        {
+          "id": "foreign_relations",
+          "text": "יחסים בינלאומיים"
+        },
+        {
+          "id": "judicial_system",
+          "text": "מערכת המשפט"
+        },
+        {
+          "id": "local_government",
+          "text": "רשויות מקומיות"
+        },
+        {
+          "id": "welfare",
+          "text": "רווחה"
+        },
+        {
+          "id": "transportation",
+          "text": "תחבורה"
+        },
+        {
+          "id": "real_estate",
+          "text": "שוק הנדל\"ן"
+        },
+        {
+          "id": "religion",
+          "text": "דת"
+        },
+        {
+          "id": "science_technology",
+          "text": "מדע וטכנולוגיה"
+        }
+      ]
+    }
+  ]
+}
