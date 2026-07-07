@@ -81,8 +81,10 @@ Data: `data/ideology.json`.
 
 ## Stage 4: Matching — internal, bio + resume only
 
-Use ONLY `bio` and `resume_text` from `data/candidates.json`; website_url
-and social are reserved for later stages.
+Use ONLY `bio` and `resume_text` from `data/candidates1.json`,
+`data/candidates2.json`, and `data/candidates3.json` (read all three —
+together they cover all candidates); website_url and social are reserved for
+later stages.
 
 - The open_answer is a first-class criterion, including priorities that
   appear in no list. If it's ambiguous, match against all plausible readings
