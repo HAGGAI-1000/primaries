@@ -12,15 +12,22 @@ Before anything else:
    and the candidate data, split across `candidates1.json`,
    `candidates2.json`, `candidates3.json`:
    - Coding agent: under `data/` in the repository.
-   - Chat website: fetch them yourself (requires web browsing):
+   - Chat website: fetch the data files using the same route through which
+     this file was successfully fetched:
+     Route A — GitHub Pages (if this file came from haggai-1000.github.io):
      - https://haggai-1000.github.io/primaries/data/primaries_criteria.json
      - https://haggai-1000.github.io/primaries/data/ideology.json
      - https://haggai-1000.github.io/primaries/data/candidates1.json
      - https://haggai-1000.github.io/primaries/data/candidates2.json
      - https://haggai-1000.github.io/primaries/data/candidates3.json
-     If these URLs are refused, fetch the GitHub page for the same path
-     instead (https://github.com/HAGGAI-1000/primaries/blob/main/data/...)
-     and extract the JSON from it.
+     Route B — GitHub blob (if this file came from github.com):
+     - https://github.com/HAGGAI-1000/primaries/blob/main/data/primaries_criteria.json
+     - https://github.com/HAGGAI-1000/primaries/blob/main/data/ideology.json
+     - https://github.com/HAGGAI-1000/primaries/blob/main/data/candidates1.json
+     - https://github.com/HAGGAI-1000/primaries/blob/main/data/candidates2.json
+     - https://github.com/HAGGAI-1000/primaries/blob/main/data/candidates3.json
+     If unsure which route this file arrived by, or if the chosen route
+     fails, try the other one.
    All file references below mean whichever copies are available.
 2. Completeness check: confirm every file parsed as valid JSON and the
    last record of each candidate part is complete. If any file cannot

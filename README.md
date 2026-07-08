@@ -12,7 +12,7 @@ Copy this single prompt into a new conversation (web browsing must be
 enabled):
 
 ```
-Fetch https://haggai-1000.github.io/primaries/AGENTS.md and follow the instructions in it.
+Fetch https://haggai-1000.github.io/primaries/AGENTS.md and follow the instructions in it. If that fails, fetch https://github.com/HAGGAI-1000/primaries/blob/main/AGENTS.md instead.
 ```
 
 That's it — the assistant fetches everything it needs from this
