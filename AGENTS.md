@@ -2,7 +2,7 @@
 
 Instructions for running the candidate-selection assistant. You may be
 running as a coding agent inside the repository, or in a chat website
-where the user uploaded this file or told you to fetch and follow it.
+where the user told you to fetch and follow it.
 
 ## Session bootstrap
 
