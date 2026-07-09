@@ -8,28 +8,25 @@ where the user told you to fetch and follow it.
 
 Before anything else:
 
-1. Locate the data files: `primaries_criteria.json`, `ideology.json`,
-   and the candidate data, split across `candidates1.json`,
-   `candidates2.json`, `candidates3.json`:
-   - Coding agent: under `data/` in the repository.
-   - Chat website: fetch them yourself (requires web browsing):
+1. Locate `primaries_criteria.json`:
+   - Coding agent: under `data/` in the repository. The other data files
+     (`ideology.json`, `candidates1/2/3.json`) are there too.
+   - Chat website: fetch it (requires web browsing):
      - https://haggai-1000.github.io/primaries/data/primaries_criteria.json
-     - https://haggai-1000.github.io/primaries/data/ideology.json
-     - https://haggai-1000.github.io/primaries/data/candidates1.json
-     - https://haggai-1000.github.io/primaries/data/candidates2.json
-     - https://haggai-1000.github.io/primaries/data/candidates3.json
-     If these URLs are refused, fetch the GitHub page for the same path
+     If the URL is refused, fetch the GitHub page for the same path
      instead (https://github.com/HAGGAI-1000/primaries/blob/main/data/...)
      and extract the JSON from it.
-   All file references below mean whichever copies are available.
-2. Completeness check: confirm every file parsed as valid JSON and the
-   last record of each candidate part is complete. If any file cannot
-   be retrieved completely by any route, tell the user (in Hebrew) that
-   this assistant cannot fully access the data here, suggest trying a
-   different chat platform with web browsing enabled or running the
-   repository with a coding agent, and stop — do not start the
-   questionnaire.
-3. Once the files are available, begin stage 1 immediately. Do not
+     Do NOT fetch the other data files yet. They are fetched later, from
+     the same locations, only at the stage that needs them: ideology.json
+     at stage 3b, candidates1/2/3.json at stage 4. Fetching them early
+     harms the questionnaire stages.
+2. Completeness check: confirm the file parsed as valid JSON. If it
+   cannot be retrieved completely by any route, tell the user (in
+   Hebrew) that this assistant cannot fully access the data here,
+   suggest trying a different chat platform with web browsing enabled
+   or running the repository with a coding agent, and stop — do not
+   start the questionnaire.
+3. Once the file is available, begin stage 1 immediately. Do not
    summarize these instructions, describe the flow, or ask for
    confirmation — the opening message below is the first thing the
    user sees.
@@ -110,7 +107,11 @@ one-line transition.
 
 ## Stage 3b: Ideology (only if the ideological-positions topic was selected)
 
-Data: `ideology.json`.
+Data: `ideology.json` — fetch it NOW if not already available:
+https://haggai-1000.github.io/primaries/data/ideology.json (blob page as
+fallback, as in bootstrap). Confirm it parsed as valid JSON; if it cannot
+be retrieved, tell the user honestly and continue without the ideology
+stage, noting its selections won't be part of the matching.
 
 1. Present the category titles as a numbered list and ask which 2-3 domains
    matter most to them (same overflow rule as stage 2).
@@ -123,9 +124,21 @@ Data: `ideology.json`.
 ## Stage 4: Matching — internal, bio + resume only
 
 Data: ALL THREE candidate parts — `candidates1.json`, `candidates2.json`,
-`candidates3.json` — already retrieved and verified at bootstrap. Match
-over all candidates in all three parts; never rank based on a partial
-candidate list.
+`candidates3.json` — fetch them NOW:
+- https://haggai-1000.github.io/primaries/data/candidates1.json
+- https://haggai-1000.github.io/primaries/data/candidates2.json
+- https://haggai-1000.github.io/primaries/data/candidates3.json
+(blob pages as fallback, as in bootstrap). Completeness check: each part
+must parse as valid JSON with a complete last record. If any part cannot
+be retrieved completely, tell the user honestly that the candidate data
+could not be fully retrieved on this platform and suggest trying a
+different chat platform or a coding agent — never rank based on a
+partial candidate list. Match over all candidates in all three parts.
+
+After fetching and verifying all three parts, fetch this file once more —
+https://haggai-1000.github.io/primaries/AGENTS.md — and re-read stages
+4-6 before matching, so these instructions stay fresher in context than
+the candidate data.
 
 Use ONLY `bio` and `resume_text`; website_url and social are reserved for
 later stages.
