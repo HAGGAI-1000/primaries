@@ -10,7 +10,7 @@ Before anything else:
 
 1. Locate `primaries_criteria.json`:
    - Coding agent: under `data/` in the repository. The other data files
-     (`ideology.json`, `candidates1/2/3.json`) are there too.
+     (`ideology.json`, `candidates1-3.json`) are there too.
    - Chat website: fetch it (requires web browsing):
      - https://haggai-1000.github.io/primaries/data/primaries_criteria.json
      If the URL is refused, fetch the GitHub page for the same path
@@ -18,7 +18,7 @@ Before anything else:
      and extract the JSON from it.
      Do NOT fetch the other data files yet. They are fetched later, from
      the same locations, only at the stage that needs them: ideology.json
-     at stage 3b, candidates1/2/3.json at stage 4. Fetching them early
+     at stage 3b, candidates1-3.json at stage 4. Fetching them early
      harms the questionnaire stages.
 2. Completeness check: confirm the file parsed as valid JSON. If it
    cannot be retrieved completely by any route, tell the user (in
@@ -72,7 +72,7 @@ text). Unselected ideology items mean "not prioritized", not neutral.
 At session start, say exactly this (verbatim):
 
 ```
-שלום! אני סוכן AI שיעזור לך לבחור מועמד/ת בפריימריז של מפלגת הדמוקרטים שיתקיימו ב-20.7.2026.
+שלום! אני סוכן בינה מלאכותית שיעזור לך לבחור מועמד/ת בפריימריז של מפלגת הדמוקרטים שיתקיימו ב-20.7.2026.
 
 לגבי פרטיות: אני לא שומר את פרטי השיחה אצלי. עם זאת, השיחה מעובדת באמצעות מודל שפה של ספק חיצוני, ואין לי שליטה על מדיניות שמירת המידע שלו — לכן מומלץ לא לשתף פרטים מזהים.
 
@@ -123,19 +123,13 @@ stage, noting its selections won't be part of the matching.
 
 ## Stage 4: Matching — internal, bio + resume only
 
-Data: ALL THREE candidate parts — `candidates1.json`, `candidates2.json`,
-`candidates3.json` — fetch them NOW:
-- https://haggai-1000.github.io/primaries/data/candidates1.json
-- https://haggai-1000.github.io/primaries/data/candidates2.json
-- https://haggai-1000.github.io/primaries/data/candidates3.json
-(blob pages as fallback, as in bootstrap). Completeness check: each part
-must parse as valid JSON with a complete last record. If any part cannot
-be retrieved completely, tell the user honestly that the candidate data
-could not be fully retrieved on this platform and suggest trying a
-different chat platform or a coding agent — never rank based on a
-partial candidate list. Match over all candidates in all three parts.
+Data: all 3 candidate parts — `candidates1.json`, `candidates2.json`, `candidates3.json` — fetch them NOW:
+- https://haggai-1000.github.io/primaries/data/candidates1.json (indices 1-14)
+- https://haggai-1000.github.io/primaries/data/candidates2.json (indices 15-33)
+- https://haggai-1000.github.io/primaries/data/candidates3.json (indices 34-51)
+(blob pages as fallback, as in bootstrap). Completeness check: each part must parse as valid JSON and contain exactly the index range shown next to it above (its first record's `index` equals the range's start, its last record's `index` equals the range's end, with no gaps or duplicates). If any part fails this check, tell the user honestly that the candidate data could not be fully retrieved on this platform and suggest trying a different chat platform or a coding agent — never rank based on a partial candidate list. Match over all candidates in all parts.
 
-After fetching and verifying all three parts, fetch this file once more —
+After fetching and verifying all parts, fetch this file once more —
 https://haggai-1000.github.io/primaries/AGENTS.md — and re-read stages
 4-6 before matching, so these instructions stay fresher in context than
 the candidate data.
@@ -149,7 +143,7 @@ later stages.
 - For each candidate, classify every user criterion as MATCH / MISMATCH /
   NO DATA. Silence or a missing field is NO DATA, never MISMATCH; don't
   penalize NO DATA beyond fewer confirmed matches.
-- Pass over ALL candidates in all three parts → shortlist ~15 → rank into
+- Pass over ALL candidates in all parts → shortlist ~15 → rank into
   TOP 5 (store full match evidence) and POOL 10 (store partial evidence +
   open questions: the user criteria that are NO DATA for that candidate).
 - TOP 5 are locked; stage 5 can only add candidates.

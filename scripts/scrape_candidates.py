@@ -3,10 +3,26 @@ import os
 import re
 from urllib.parse import urlparse
 
+import requests
 from bs4 import BeautifulSoup
+
+from fetch_resumes import enrich_with_resumes
+from split_candidates import split_and_publish
 
 HERE = os.path.dirname(os.path.abspath(__file__))
 DATA_DIR = os.path.join(HERE, "..", "data")
+
+PAGE_URL = "https://democrats.org.il/candidates/"
+HEADERS = {"User-Agent": "Mozilla/5.0"}
+RAW_HTML_PATH = os.path.join(DATA_DIR, "candidates_page_raw.html")
+
+
+def download_page(url=PAGE_URL, dest_path=RAW_HTML_PATH):
+    resp = requests.get(url, headers=HEADERS, timeout=30)
+    resp.raise_for_status()
+    with open(dest_path, "wb") as f:
+        f.write(resp.content)
+    return len(resp.content)
 
 
 def classify_social(href):
@@ -43,9 +59,6 @@ def parse_item(item):
             bio = text
             break
 
-    first_name = name_parts[0] if name_parts else ""
-    last_name = name_parts[-1] if len(name_parts) > 1 else ""
-
     website_url = None
     website_icon = item.select_one('img[src*="website.svg"]')
     if website_icon:
@@ -74,9 +87,8 @@ def parse_item(item):
             social[kind] = href
 
     return {
-        "post_id": post_id,
+        "id": post_id,
         "name": " ".join(name_parts).strip(),
-        "name_parts": name_parts,
         "bio": bio,
         "website_url": website_url,
         "cv_url": cv_url,
@@ -85,7 +97,10 @@ def parse_item(item):
 
 
 def main():
-    with open(os.path.join(DATA_DIR, "candidates_page_raw.html"), encoding="utf-8") as f:
+    size = download_page()
+    print(f"Downloaded {PAGE_URL} -> {RAW_HTML_PATH} ({size} bytes)")
+
+    with open(RAW_HTML_PATH, encoding="utf-8") as f:
         html = f.read()
 
     soup = BeautifulSoup(html, "html.parser")
@@ -95,20 +110,39 @@ def main():
     seen_ids = set()
     for item in items:
         data = parse_item(item)
-        if data["post_id"] in seen_ids:
+        if data["id"] in seen_ids:
             continue
-        seen_ids.add(data["post_id"])
+        seen_ids.add(data["id"])
         candidates.append(data)
 
     out_path = os.path.join(DATA_DIR, "candidates.json")
     with open(out_path, "w", encoding="utf-8") as f:
         json.dump(candidates, f, ensure_ascii=False, indent=2)
 
-    missing_bio = [c["post_id"] for c in candidates if not c["bio"]]
-    missing_cv = [c["post_id"] for c in candidates if not c["cv_url"]]
+    missing_bio = [c["id"] for c in candidates if not c["bio"]]
+    missing_cv = [c["id"] for c in candidates if not c["cv_url"]]
     print(f"Parsed {len(candidates)} candidates -> {out_path}")
     print(f"Missing bio: {len(missing_bio)} {missing_bio}")
     print(f"Missing cv: {len(missing_cv)} {missing_cv}")
+
+    results = enrich_with_resumes(candidates)
+    print(f"Resumes: ok={len(results['ok'])} no_cv={len(results['no_cv'])} "
+          f"download_failed={len(results['download_failed'])} "
+          f"extract_failed={len(results['extract_failed'])} "
+          f"empty_text={len(results['empty_text'])} "
+          f"rtl_fixed={len(results['rtl_fixed'])}")
+
+    for i, c in enumerate(candidates, start=1):
+        c.pop("cv_url", None)
+        candidates[i - 1] = {"index": i, **c}
+
+    with open(out_path, "w", encoding="utf-8") as f:
+        json.dump(candidates, f, ensure_ascii=False, indent=2)
+    with open(os.path.join(DATA_DIR, "fetch_resumes_report.json"), "w", encoding="utf-8") as f:
+        json.dump(results, f, ensure_ascii=False, indent=2)
+
+    n_parts = split_and_publish(candidates)
+    print(f"Split into {n_parts} part file(s); updated AGENTS.md and README.md")
 
 
 if __name__ == "__main__":

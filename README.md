@@ -1,10 +1,6 @@
-# Democrats Primary Candidate Selector
+# Primaries Candidate Selector
 
-An instruction-driven assistant that helps you choose a candidate in the
-Democrats party (מפלגת הדמוקרטים) primaries on 20.7.2026. There is no
-application code — the flow is defined in `AGENTS.md` and runs inside an
-AI assistant, which guides you through a short questionnaire (in Hebrew)
-and matches your priorities against the candidates' published materials.
+An AI assistant that helps you choose who to vote for in party primaries, by matching your priorities against the candidates' own published materials. Currently covers the Democrats party (מפלגת הדמוקרטים) primaries on 20.7.2026; other parties may be added as their candidate lists are published. There is no application code — the flow is defined in `AGENTS.md` and runs inside an AI assistant, which guides you through a short questionnaire (in Hebrew) and matches your priorities against the candidates' published materials.
 
 ## Using via a chat website (Claude / ChatGPT / Gemini)
 
@@ -41,9 +37,8 @@ Notes:
 - `CLAUDE.md` — one-line import of AGENTS.md, for Claude Code
 - `data/primaries_criteria.json` — selection-criteria topics and items
 - `data/ideology.json` — ideological positions (paired opposing stances)
-- `data/candidates1.json`, `data/candidates2.json`,
-  `data/candidates3.json` — candidate bios, resumes, and links, split
-  into three parts so each can be fetched whole by chat assistants
+- `data/candidates1.json`, `data/candidates2.json`, `data/candidates3.json` — candidate bios, resumes, and links, split
+  into 3 parts so each can be fetched whole by chat assistants
 - `scripts/` — data collection and maintenance scripts
 
 ## Disclaimer
