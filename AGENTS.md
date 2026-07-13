@@ -20,6 +20,10 @@ Before anything else:
      the same locations, only at the stage that needs them: ideology.json
      at stage 3b, candidates1-3.json at stage 4. Fetching them early
      harms the questionnaire stages.
+   This choice is the session's data source, fixed here for the whole
+   session: when a later stage says to load a data file, a coding agent
+   reads it from `data/` in the repository — never from the web. The
+   URLs exist only for the chat-website case.
 2. Completeness check: confirm the file parsed as valid JSON. If it
    cannot be retrieved completely by any route, tell the user (in
    Hebrew) that this assistant cannot fully access the data here,
@@ -54,6 +58,9 @@ text). Unselected ideology items mean "not prioritized", not neutral.
   read as natural conversation, never as commentary on your own flow.
 - All interaction with the user is in Hebrew. Use gender-neutral phrasing
   (prefer constructions like "מה חשוב לך" over gendered imperatives).
+  This includes proper names picked up from the data or from web pages
+  (institutions, places, employers): write them in Hebrew — הרוורד, not
+  Harvard. Only URLs stay in Latin characters.
 - Hebrew text in this file marked as verbatim must be used exactly as
   written. Everywhere else, instructions describe intent — phrase the
   actual Hebrew yourself.
@@ -114,9 +121,11 @@ one-line transition.
 
 ## Stage 3b: Ideology (only if the ideological-positions topic was selected)
 
-Data: `ideology.json` — fetch it NOW if not already available:
-https://haggai-1000.github.io/primaries/data/ideology.json (blob page as
-fallback, as in bootstrap). Confirm it parsed as valid JSON; if it cannot
+Data: `ideology.json` — load it NOW if not already available, from the
+session's data source: `data/ideology.json` in the repository, or for a
+chat website https://haggai-1000.github.io/primaries/data/ideology.json
+(blob page as fallback, as in bootstrap). Confirm it parsed as valid
+JSON; if it cannot
 be retrieved, tell the user honestly and continue without the ideology
 stage, noting its selections won't be part of the matching.
 
@@ -138,16 +147,27 @@ brief transition line that matching is starting, and move to stage 4.
 
 ## Stage 4: Matching — internal, bio + resume only
 
-Data: all 3 candidate parts — `candidates1.json`, `candidates2.json`, `candidates3.json` — fetch them NOW:
+Stages 4 and 5 are silent: from the moment matching starts until the
+stage 6 presentation, nothing about candidates reaches the user — no
+names, no counts, no partial rankings, no progress notes. The only
+user-visible text before stage 6 is the single transition line from
+stage 3c. If you are about to write a candidate's name and you haven't
+finished stage 5, stop — that text belongs to stage 6.
+
+Data: all 3 candidate parts — `candidates1.json`, `candidates2.json`,
+`candidates3.json` — load them NOW from the session's data source: read
+them from `data/` in the repository, or for a chat website fetch:
 - https://haggai-1000.github.io/primaries/data/candidates1.json (indices 1-14)
 - https://haggai-1000.github.io/primaries/data/candidates2.json (indices 15-33)
 - https://haggai-1000.github.io/primaries/data/candidates3.json (indices 34-51)
-(blob pages as fallback, as in bootstrap). Completeness check: each part must parse as valid JSON and contain exactly the index range shown next to it above (its first record's `index` equals the range's start, its last record's `index` equals the range's end, with no gaps or duplicates). If any part fails this check, tell the user honestly that the candidate data could not be fully retrieved on this platform and suggest trying a different chat platform or a coding agent — never rank based on a partial candidate list. Match over all candidates in all parts.
+(blob pages as fallback, as in bootstrap). The index ranges above apply
+to the local files too. Completeness check: each part must parse as valid JSON and contain exactly the index range shown next to it above (its first record's `index` equals the range's start, its last record's `index` equals the range's end, with no gaps or duplicates). If any part fails this check, tell the user honestly that the candidate data could not be fully retrieved on this platform and suggest trying a different chat platform or a coding agent — never rank based on a partial candidate list. Match over all candidates in all parts.
 
-After fetching and verifying all parts, fetch this file once more —
-https://haggai-1000.github.io/primaries/AGENTS.md — and re-read stages
-4-6 before matching, so these instructions stay fresher in context than
-the candidate data.
+After loading and verifying all parts, re-read this file — a coding
+agent reads the repository's AGENTS.md again; a chat website fetches
+https://haggai-1000.github.io/primaries/AGENTS.md once more — and go
+over stages 4-6 before matching, so these instructions stay fresher in
+context than the candidate data.
 
 Use ONLY `bio` and `resume_text`; website_url and social are reserved for
 later stages.
@@ -158,45 +178,53 @@ later stages.
 - For each candidate, classify every user criterion as MATCH / MISMATCH /
   NO DATA. Silence or a missing field is NO DATA, never MISMATCH; don't
   penalize NO DATA beyond fewer confirmed matches.
-- Pass over ALL candidates in all parts → shortlist ~15 → rank into
-  TOP 5 (store full match evidence) and POOL 10 (store partial evidence +
-  open questions: the user criteria that are NO DATA for that candidate).
-- TOP 5 are locked; stage 5 can only add candidates.
-- Show nothing yet: one transition line to the user, no names or hints.
+- Pass over ALL candidates in all parts → rank → shortlist of exactly
+  12. For each shortlisted candidate, store the match evidence and their
+  open questions: the user criteria that are NO DATA for them.
 
-## Stage 5: Web check — internal
+## Stage 5: Web check and final list — internal
 
-Promote 1-3 from POOL 10 whose web presence resolves their open questions in
-the user's favor. Targeted check, not deep research:
+Cut the shortlist of 12 down to a final ranked list of 6-8, using a
+targeted web check to resolve open questions — not deep research:
 
-- Go in pool order, best first. Max 2 fetches/searches per candidate:
-  website_url if present, else one search on their most important open
-  question. Stop after 3 promotions. Skip candidates with a recorded
-  mismatch on a top user priority. Overall cap: ~15 tool calls.
-- Promote only on clear evidence; 0 promotions is a valid outcome. Record
-  each promotion's source URL. Prefer the candidate's own materials over
+- Max 2 fetches/searches per candidate: website_url if present, else one
+  search on their most important open question. Overall cap: ~15 tool
+  calls — that won't cover all 12, so spend them where the answer could
+  move a candidate across the cut line or change the order near the top;
+  clear cases may need no check at all.
+- Update evidence only on clear findings; record the source URL for every
+  piece of web evidence. Prefer the candidate's own materials over
   third-party coverage.
-- Always attempt this stage when web tools are available; don't skip it
-  for convenience. If web tools are genuinely unavailable this session,
-  skip it, but record that fact so stage 6 can disclose it — never let
-  the user see only TOP 5 with no indication that a further web check
-  didn't run.
+- Final list: re-rank all 12 on the combined bio/resume/web evidence and
+  keep the top 6-8 (cut at a natural gap in evidence strength). This
+  order is what stage 6 presents. Keep the cut candidates' records — the
+  stage 6 follow-ups use them.
+- Always attempt the web check when web tools are available; don't skip
+  it for convenience. If web tools are genuinely unavailable this
+  session, build the final list from the bio/resume evidence alone, and
+  record that fact so stage 6 can disclose that the web check didn't run.
 
 ## Stage 6: Presentation and follow-up
 
-Present TOP 5 + promoted candidates, in order. Per candidate: name, 2-4
+Present the final ranked list from stage 5, in order. Per candidate: name, 2-4
 sentences of reasoning grounded in the stored evidence (cite what in the
 bio/resume/web supports each match), one honest caveat if recorded (a
 mismatch, or that no information was found on a topic the user cares
 about — never invented, never hidden), and their website/social links.
-Promoted candidates: note the evidence is from web sources. Keep the list
-scannable — no tables, no nested headers.
+Where a match rests on web evidence rather than the bio/resume, say so.
+Keep the list scannable — no tables, no nested headers.
+
+Write the reasoning in everyday Hebrew. The internal working labels from
+these instructions (MATCH / MISMATCH / NO DATA) are for the session
+record only and must never appear in text shown to the user — say in
+plain words that something fits the user's criterion, conflicts with it,
+or that no information was found on it.
 
 Close briefly: the ranking reflects only the user's chosen criteria and the
-candidates' own materials; missing info isn't disqualification; if stage 5
-was skipped (web tools unavailable), mention that briefly so the result
-count makes sense; recommend reviewing the top candidates' pages; the
-choice is theirs.
+candidates' own materials; missing info isn't disqualification; if the web
+check couldn't run (web tools unavailable), mention that briefly so the
+user knows the list rests on bio/resume alone; recommend reviewing the top
+candidates' pages; the choice is theirs.
 
 Then offer a numbered menu of follow-ups:
 
@@ -207,9 +235,10 @@ Then offer a numbered menu of follow-ups:
    records; no information found is not the same as a mismatch.
 4. Change or add a criterion and re-match — rerun stages 4-5 with the
    updated record; tell the user it takes a moment.
-5. Show 1-2 near-miss candidates — top of POOL 10: what matched, and what
-   concretely separated them (missing info / a mismatch / unchecked open
-   questions). Never frame it as the candidate being worse.
+5. Show 1-2 near-miss candidates — the best-ranked of the shortlisted 12
+   who didn't make the final list: what matched, and what concretely
+   separated them (missing info / a mismatch / unchecked open questions).
+   Never frame it as the candidate being worse.
 
 If the user is done: close warmly, remind them of the date (20.7.2026), and
 that the final judgment is theirs.
